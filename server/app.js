@@ -9,7 +9,7 @@ const app = express() //creating a express app
 
 const server = createServer(app) //creating a server/circuit using http for app
 
-// io is made the new instance of socket.io server by using erver from socket.io to convert the http server into and socket.io server/circuit and also we enable CORS for our socket.io server
+// io is made the new instance of socket.io server by using Server fxn from socket.io to convert the http server into and socket.io server/circuit and also we enable CORS for our socket.io server
 
 const io = new Server(server, {
     cors: {
@@ -19,7 +19,7 @@ const io = new Server(server, {
     }
 }) 
 
-//the below lin creates a server and has the access to sockets connecte to it which we can use inside callback function
+//the below line creates a server and has the access to sockets connected to it which we can use inside callback function
 
 
 
@@ -42,8 +42,14 @@ io.on("connection", (socket) => {
 
 
     //both events were for basic understanding
-    //2. socket.emit("Welcome", `Welcome to the server.`)
-    //3. socket.broadcast.emit("welcome", `${socket.id} joined the server`)
+
+
+    //2. every connected client would emmit this event and data, this event is handled in client side in each socket and it prints the message on console
+    socket.emit("Welcome", `Welcome to the server.`)
+
+    //3. in this case at a time only one socket will broadcast (the socket that is refreshed) while all other socket will handle this event
+    // in this case a socket is emitting the message that it has joined the server along with its id, so in the console of all other clients this broadcast will be handleded or say the even t will be handled except for the socket who is emitting it.
+    socket.broadcast.emit("welcome", `${socket.id} joined the server`)
 
 
 
@@ -57,17 +63,24 @@ io.on("connection", (socket) => {
         // a. one step ahead
         //we emit the received message from server 
         //inorder to see what it does we must listen it in the client side
+
+        //io.emit emits the recieve message and event to all clients or sockets which handles it under the event name received-msg
         // io.emit("received-msg", message)
 
 
         //b. what if socket.broadcast.emit.
         //whatever socket triggers the message event by typing the message and sending it will end up sendin it to all sockets connected which will handle the message under received-msg event.
+        //triggering and handling sockets ae same.
         // socket.broadcast.emit("received-msg", message)
 
 
-        //c. sending it to a specific receiver from the source socket.
+        //c. sending it to a specific receiver from the source socket -> private text
         //to takes a room or an rray of rooms to which we want to send.
         // to gets the room from data and message being originated from source socket once the message event is triggered.
+        //socket.to().emit("received-msg", message) will also work exactly same.
+
+        
+
         io.to(room).emit("received-msg", message )
     })
 

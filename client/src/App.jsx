@@ -51,20 +51,20 @@ const App = () => {
 
 
     // handling our custom event named "Welcome"
+
     // s is the data emitted
     //the emitted message is recieved, the event Welcome is handled and by logic we print s which is nothing but the emitted message
 
-    // socket.on("Welcome", (s) => {
-    //   console.log(s)
-    // })
+    socket.on("Welcome", (s) => {
+      console.log(s)
+    })
 
 
     //handling welcome emit
-    //this is abroadcast emit, so it is ahndled only for the sockets other than the current socket, what is the current socket -> add two client and reload any one , its id changes and it reconnects and hence all the sockets other than the reloaded socket handles this event and the get a message -> `id (of the relaoded socket) joined the server`
 
-    // socket.on("welcome", (s) => {
-    //   console.log(s)
-    // })
+    socket.on("welcome", (s) => {
+      console.log(s)
+    })
 
 
     //received msg event
